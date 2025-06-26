@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spam Detector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      font-size: 1rem;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Spam Detection App</h1>
+  <p>Enter a message to check if it's spam:</p>
+  <input type="text" id="textInput" placeholder="Type message here" size="50"/>
+  <br>
+  <button onclick="checkSpam()">Check</button>
+  <p id="result"></p>
+
+  <script>
+    async function checkSpam() {
+      const text = document.getElementById('textInput').value;
+      const resultEl = document.getElementById('result');
+
+      if (!text.trim()) {
+        resultEl.innerText = "Please enter a message.";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8000/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: text })
+        });
+
+        if (!response.ok) throw new Error("Request failed");
+
+        const data = await response.json();
+        resultEl.innerText = `Prediction: ${data.prediction}`;
+      } catch (err) {
+        resultEl.innerText = "Error: Could not contact prediction service.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
