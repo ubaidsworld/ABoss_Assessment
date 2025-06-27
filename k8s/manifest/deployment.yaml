@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aboss-spam-check
+  labels:
+    app: aboss-spam-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aboss-spam-check
+  template:
+    metadata:
+      labels:
+        app: aboss-spam-check
+    spec:
+      containers:
+      - name: aboss-spam-check
+        image: ubaidullah244/spam_check:latest
+        ports:
+        - containerPort: 8000
