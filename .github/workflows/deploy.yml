@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "Waiting for https://aboss-demo.duckdns.org to be ready..."
           for i in {1..30}; do
-            if curl -sSf --max-time 5 https://aboss-demo.duckdns.org > /dev/null; then
+            if curl -sSf --max-time 30 https://aboss-demo.duckdns.org > /dev/null; then
               echo "✅ App is live!"
               exit 0
             else
