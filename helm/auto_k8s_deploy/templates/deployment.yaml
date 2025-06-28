@@ -5,7 +5,7 @@ metadata:
   labels:
     app: aboss-spam-check
 spec:
-  replicas: 1
+  replicas: {{.Values.deploy_replicas_count}}
   selector:
     matchLabels:
       app: aboss-spam-check
@@ -19,3 +19,17 @@ spec:
         image: ubaidullah244/spam_check:latest
         ports:
         - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3
