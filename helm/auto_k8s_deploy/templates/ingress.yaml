@@ -4,6 +4,7 @@ metadata:
   name: aboss-demo-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     cert-manager.io/cluster-issuer: letsencrypt-duckdns
 spec:
   ingressClassName: nginx
