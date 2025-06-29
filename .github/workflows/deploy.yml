@@ -73,7 +73,8 @@ jobs:
       
       - name: Helm upgrade or install
         run: |
-          helm upgrade --install aboss helm/auto_k8s_deploy --wait
+          helm uninstall aboss
+          helm install aboss helm/auto_k8s_deploy --wait
           
   test-deploy-success:
     runs-on: ubuntu-latest
