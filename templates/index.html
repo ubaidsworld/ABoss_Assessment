@@ -21,13 +21,24 @@
       margin-top: 1rem;
       font-weight: bold;
       font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    .spam {
+      color: #fff;
+      background-color: #e74c3c; /* Red */
+    }
+    .not-spam {
+      color: #2d572c;
+      background-color: #d4edda; /* Light green */
     }
   </style>
 </head>
 <body>
   <h1>Spam Detection App</h1>
   <p>Enter a message to check if it's spam:</p>
-  <input type="text" id="textInput" placeholder="Type message here" size="50"/>
+  <input type="text" id="textInput" placeholder="Type message here" size="50" />
   <br>
   <button onclick="checkSpam()">Check</button>
   <p id="result"></p>
@@ -39,6 +50,7 @@
 
       if (!text.trim()) {
         resultEl.innerText = "Please enter a message.";
+        resultEl.className = '';
         return;
       }
 
@@ -55,8 +67,17 @@
 
         const data = await response.json();
         resultEl.innerText = `Prediction: ${data.prediction}`;
+
+        // Apply styling
+        if (data.prediction.toLowerCase() === 'spam') {
+          resultEl.className = 'spam';
+        } else {
+          resultEl.className = 'not-spam';
+        }
+
       } catch (err) {
         resultEl.innerText = "Error: Could not contact prediction service.";
+        resultEl.className = '';
         console.error(err);
       }
     }
