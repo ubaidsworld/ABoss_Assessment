@@ -7,13 +7,8 @@ spec:
     email: ubaidullah244@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-duckdns-private-key
+      name: letsencrypt-duckdns-account-key
     solvers:
-    - dns01:
-        webhook:
-          groupName: acme.duckdns.org
-          solverName: duckdns
-          config:
-            tokenSecretRef:
-              name: duckdns-api-secret
-              key: token
+    - http01:
+        ingress:
+          class: nginx
