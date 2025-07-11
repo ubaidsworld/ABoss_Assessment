@@ -73,6 +73,12 @@ jobs:
       
       - name: Helm upgrade or install
         run: |
+          if ! kubectl get ns ingress-nginx >/dev/null 2>&1; then
+            echo "🛠️ Installing ingress-nginx..."
+            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.1/deploy/static/provider/aws/deploy.yaml
+          else
+            echo "✅ Ingress-nginx is already present."
+          fi
           helm uninstall aboss
           helm install aboss helm/auto_k8s_deploy --wait
           
