@@ -1,8 +1,9 @@
 name: Deploying app on Kubernetes
 on:
-  push:
-    branches:
-      - main  # Trigger on push to main branch
+  workflow_dispatch:  
+  # push:
+    # branches:
+    #   - main  # Trigger on push to main branch
 
 jobs:
   unit_test_modules:
@@ -70,8 +71,8 @@ jobs:
       
       - name: Install Helm
         uses: azure/setup-helm@v3
-      
-      - name: Helm upgrade or install
+
+      - name: Chech and Install Nginx Ingress Controller
         run: |
           if ! kubectl get ns ingress-nginx >/dev/null 2>&1; then
             echo "🛠️ Installing ingress-nginx..."
@@ -79,6 +80,8 @@ jobs:
           else
             echo "✅ Ingress-nginx is already present."
           fi
+      - name: Helm upgrade or install
+        run: |
           helm uninstall aboss
           helm install aboss helm/auto_k8s_deploy --wait
           
