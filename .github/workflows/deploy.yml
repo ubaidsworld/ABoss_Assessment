@@ -80,9 +80,11 @@ jobs:
           else
             echo "✅ Ingress-nginx is already present."
           fi
+          
       - name: Check and Install Prometheus & Grafana
         env:
           GRAFANA_ADMIN_PASSWORD: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+          DUCK_DNS_TOKEN: ${{ secrets.DUCKDNSTOKEN}}
         run: |
           #!/bin/bash
           set -e
@@ -115,7 +117,26 @@ jobs:
           else
             echo "Grafana is already installed."
           fi
-    
+      
+      - name: Check and install Cert Manager
+        run:
+          |
+          if ! kubectl get ns cert-manager >/dev/null 2>&1; then
+            echo "🛠️ Installing Cert Manager..."
+            kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+          else
+            echo "✅ Cert Manager is already present."
+          fi
+
+          if ! kubectl get secret duckdns-api-secret -n cert-manager >/dev/null 2>&1; then
+            echo "🔐 Creating duckdns-api-secret..."
+            kubectl create secret generic duckdns-api-secret \
+              --from-literal=token="$DUCK_DNS_TOKEN" \
+              --namespace=cert-manager
+          else
+            echo "✅ duckdns-api-secret already exists."
+          fi
+          
       - name: Helm upgrade or install
         run: |
           helm uninstall aboss || true
