@@ -118,7 +118,7 @@ jobs:
     
       - name: Helm upgrade or install
         run: |
-          helm uninstall aboss
+          helm uninstall aboss || true
           helm install aboss helm/auto_k8s_deploy --wait
           
   test-deploy-success:
