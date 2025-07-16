@@ -6,8 +6,7 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  # cluster_name = "aboss-demo-cluster"
-  cluster_name = "A6"
+  cluster_name = "aboss-demo-cluster"
 }
 
 resource "random_string" "suffix" {
